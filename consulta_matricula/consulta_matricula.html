@@ -37,15 +37,28 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script type="text/javascript" src="base.json" charset="ISO-8859-1"></script>
     <script type="text/javascript">
-      $("#busca_cpf").click(function(){
+      function verifica_cpf(){
         var cpf = $("#cpf").val();
-        console.log(cpf);
+        msg = "<br/>";
         for (var i = 0; i < jsonData.length; i++) {
           if(jsonData[i].cpf_mae == cpf || jsonData[i].cpf_pai == cpf){
-            $("#return").text(`Aluno: ${jsonData[i].aluno} | Matrícula: ${jsonData[i].matricula}`);
-            break;
+            msg+=`Aluno: ${jsonData[i].aluno} | Matrícula: ${jsonData[i].matricula}<br/>`;
           } 
         }
+        if(msg == "<br/>"){
+          msg+= "<p style='color: red'>Não foram encontrados alunos relacionados a esse CPF.<br/>Insira o CPF válido do pai/mãe.<p>";
+        }
+        document.getElementById("return").innerHTML = msg;
+      }
+
+      $('#cpf').keypress(function (e) {
+        if (e.which == 13) {
+          verifica_cpf();
+          return false;    //<---- Add this line
+        }
+      });
+      $("#busca_cpf").click(function(){
+        verifica_cpf();
       });
     </script>
   </body>
